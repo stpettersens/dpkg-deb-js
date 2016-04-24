@@ -1,0 +1,7 @@
+node_modules/
+demo_0.1-1/
+*.deb
+*.tar.gz
+*.tgz
+.gitignore
+.npmignore

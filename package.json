@@ -1,0 +1,33 @@
+{
+  "name": "dpkg-deb-js",
+  "version": "1.0.0",
+  "description": "Node.js implementation of dpkg-deb",
+  "main": "dpkg-deb.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "bin": {
+    "dpkg-deb-js": "./dpkg-deb.js"
+  },
+  "preferGlobal": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/stpettersens/dpkg-deb-js.git"
+  },
+  "keywords": [
+    "dpkg",
+    "deb",
+    "utility",
+    "js"
+  ],
+  "author": "Sam Saint-Pettersen <s.stpettersen+github@gmail.com>",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/stpettersens/dpkg-deb-js/issues"
+  },
+  "homepage": "https://github.com/stpettersens/dpkg-deb-js#readme",
+  "dependencies": {
+    "artichoke": "^0.1.0",
+    "tarino": "^0.1.0"
+  }
+}
