@@ -89,8 +89,7 @@ function displayUsage (program, exitCode) {
 function main (args) {
   if (args.length === 2) {
     displayError(args[1], 'need an action operation')
-  }
-  else {
+  } else {
     for (let i = 2; i < args.length; i++) {
       if (/-h|--help/.test(args[i])) {
         displayUsage(args[1], 0)
@@ -102,10 +101,10 @@ function main (args) {
         buildDebianArchive(args[i + 1])
       }
       if (/-c|--contents/.test(args[i])) {
-
+        // ...
       }
       if (/-I|--info/.test(args[i])) {
-        
+        // ...
       }
     }
   }
