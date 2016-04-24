@@ -1,5 +1,5 @@
 /*
-  Test tarino.
+  Test dpkg-deb-js tool.
 */
 
 /* global describe it */
@@ -11,7 +11,7 @@ const _exec = require('child_process').exec
 
 const sources = ['dpkg-deb.js', 'dpkg-deb.test.js']
 
-describe('Test dpkg-deb-js tool:', function () {
+describe('Test dpkg-deb-js tool:\n', function () {
   it('Test code conforms to JS Standard Style (http://standardjs.com).', function (done) {
     _exec(`standard ${sources.join(' ')}`, function (err, stdout, stderr) {
       let passed = true
@@ -27,15 +27,16 @@ describe('Test dpkg-deb-js tool:', function () {
 
   it('Should create a debian package from `demo_0.1.1` directory.', function (done) {
     process.chdir('.')
-    _exec('node dpkg-deb.js --build demo_0.1-1', function (err, stdout, stderr) {
+    let target = 'demo_0.1-1'
+    _exec(`node dpkg-deb.js --build ${target}`, function (err, stdout, stderr) {
       if (err || stderr.length > 0) {
         console.log('\n' + stderr)
       }
-      console.log(stdout)
+      console.log('\n\t' + stdout)
+      if (!fs.existsSync(`${target}.deb`)) {
+        throw Error
+      }
+      done()
     })
-    if (!fs.existsSync('demo_0.1-1.deb')) {
-      throw Error
-    }
-    done()
   })
 })

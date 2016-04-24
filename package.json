@@ -4,7 +4,7 @@
   "description": "Node.js implementation of dpkg-deb",
   "main": "dpkg-deb.js",
   "scripts": {
-    "test": "mocha dpkg-deb.test.js"
+    "test": "mocha dpkg-deb.test.js --timeout=100000"
   },
   "bin": {
     "dpkg-deb-js": "./dpkg-deb.js"
