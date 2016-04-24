@@ -1,2 +1,2 @@
-# dpkg-deb-js
-dpkg-deb implementation with Node.js
+### dpkg-deb-js
+> dpkg-deb implementation with Node.js
