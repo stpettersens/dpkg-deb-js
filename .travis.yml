@@ -1,8 +1,8 @@
 language: node_js
 node_js:
-  #- '5.1'
+  - '5.1'
   - '4.2'
-  #- 'iojs'
+  - 'iojs'
 env:
   - CXX=g++-4.8
 addons:
@@ -15,4 +15,3 @@ addons:
 before_install:
   - npm install -g standard
   - npm install -g mocha
-#
