@@ -1,4 +1,4 @@
-#!/bin/env node
+#!/usr/bin/env node
 /*
   dpkg-deb implementation with Node.js.
   Copyright 2016 Sam Saint-Pettersen.
