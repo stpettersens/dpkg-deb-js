@@ -1,27 +1,29 @@
-#!/usr/bin/env node
 /*
   dpkg-deb implementation with Node.js.
   Copyright 2016 Sam Saint-Pettersen.
 
-  Released as original dpkg-deb by Ian Jackson under
-  the GNU General Public License; see GPL-LICENSE.
+  Released as original dpkg-deb under the
+  GNU General Public License and in additon
+  the MIT License; see GPL-LICENSE and MIT-LICENSE.
 */
 
 'use strict'
-
-const fs = require('fs')
+const fs = require('fs-extra')
+const glob = require('glob')
 const tarino = require('tarino')
 const artichoke = require('artichoke')
+const titlecase = require('title-case')
+const dos2unix = require('ssp-dos2unix').dos2unix
 
 let DELIMITER = '_'
 
 function readCtrlFile (control) {
   try {
     let pkg = {}
-    let ctrl = fs.readFileSync(control).toString().split('\n')
+    let ctrl = fs.readFileSync(control, 'utf8').toString().split('\n')
     ctrl.map(function (line) {
       if (line.indexOf('Package:') !== -1) {
-        pkg.name = line.split(':')[1].trim()
+        pkg.package = line.split(':')[1].trim()
       }
       if (line.indexOf('Version:') !== -1) {
         pkg.version = line.split(':')[1].trim()
@@ -31,28 +33,31 @@ function readCtrlFile (control) {
   } catch (e) {
     console.warn('Cannot open `control` file to create Debian archive:')
     console.log(e.path)
-    process.exit(-1)
+    return 0
   }
 }
 
 function createCtrlArchive (pkg) {
-  let rt = `${pkg.name}${DELIMITER}${pkg.version}`
+  let rt = `${pkg.package}${DELIMITER}${pkg.version}`
   tarino.createTarGz('control.tar.gz', 'control', {root: `${rt}/DEBIAN`, flat: true})
   return pkg
 }
 
 function createDataArchive (pkg) {
-  let rt = `${pkg.name}${DELIMITER}${pkg.version}`
+  let rt = `${pkg.package}${DELIMITER}${pkg.version}`
   tarino.createTarGz('data.tar.gz', 'opt', {root: rt, folder: true})
 }
 
-function createDebArchive (pkg) {
-  let deb = `${pkg.name}_${pkg.version}.deb`
+function createDebArchive (pkg, verbose) {
+  let deb = `${pkg.package}${DELIMITER}${pkg.version}.deb`
   let contents = ['debian-binary', 'control.tar.gz', 'data.tar.gz']
-  console.info("dpkg-deb-js: building package '%s' in '%s'.", pkg.name, deb)
+  if (verbose) {
+    console.info("dpkg-deb-js: building package '%s' in '%s'.", pkg.package, deb)
+  }
   fs.writeFileSync('debian-binary', '2.0\n')
   artichoke.createArchive(deb, contents)
   cleanUp(contents)
+  return 0
 }
 
 function cleanUp (contents) {
@@ -61,53 +66,88 @@ function cleanUp (contents) {
   })
 }
 
-function buildDebianArchive (src) {
+function processLineEndings (f, write) {
+  let fis = []
+  let files = glob.sync(f + '/*/**')
+  files.map(function (fi) {
+    if (!fs.lstatSync(fi).isDirectory()) {
+      let r = dos2unix(fi, {write: write})
+      if (r === 1) {
+        r = fi
+      }
+      fis.push(r)
+    } else {
+      fis.push(fi)
+    }
+  })
+  return fis
+}
+
+module.exports.buildDebianArchive = function (src, verbose) {
   let pkg = createCtrlArchive(readCtrlFile(`${src}/DEBIAN/control`))
   createDataArchive(pkg)
   fs.watchFile('data.tar.gz', function (curr, prev) {
     if (curr.size > 0) {
-      createDebArchive(pkg)
-      process.exit(0)
+      if (createDebArchive(pkg, verbose) === 0) {
+        process.exit(0)
+      } else {
+        process.exit(2)
+      }
     }
   })
 }
 
-function displayError (program, message) {
-  console.info('dpkg-deb-js: error: %s', message)
-  displayUsage(program, -1)
-}
+module.exports.generateDebianStaging = function (pkg, files, options) {
+  let processed = []
+  let out = []
+  let ctrl = []
+  for (let key in pkg) {
+    ctrl.push(`${titlecase(key)}: ${pkg[key]}`)
+  }
+  ctrl.push('')
 
-function displayUsage (program, exitCode) {
-  console.log('\nUsage: %s [<option> ...] <command>\n', program)
-  console.log('Commands:')
-  console.log('  -b|--build <directory> [<deb>]  Build an archive.')
-  console.log('  -c|--contents <deb>             List contents.')
-  console.log('  -I|--info <deb>                 Show info to stdout.')
-  process.exit(exitCode)
-}
+  if (pkg === undefined || pkg.package === undefined || pkg.version === undefined) {
+    console.warn('At least package name and version must be defined.')
+    return [2, null, null]
+  }
 
-function main (args) {
-  if (args.length === 2) {
-    displayError(args[1], 'need an action operation')
-  } else {
-    for (let i = 2; i < args.length; i++) {
-      if (/-h|--help/.test(args[i])) {
-        displayUsage(args[1], 0)
-      }
-      if (/-b|--build/.test(args[i])) {
-        if (args[i + 1] === undefined) {
-          displayError(args[1], '--build needs a <directory> argument')
-        }
-        buildDebianArchive(args[i + 1])
-      }
-      if (/-c|--contents/.test(args[i])) {
-        // ...
-      }
-      if (/-I|--info/.test(args[i])) {
-        // ...
-      }
+  if (options === undefined) {
+    options = {
+      write: true,
+      folder: ''
     }
   }
-}
 
-main(process.argv)
+  if (options.write) {
+    if (options.folder === undefined) {
+      options.folder = ''
+    } else {
+      options.folder += '/'
+    }
+    let dpath = `${options.folder}${pkg.package}${DELIMITER}${pkg.version}/DEBIAN`
+    fs.mkdirpSync(dpath)
+    fs.writeFileSync(`${dpath}/control`, ctrl.join('\n'), 'utf8')
+    files.map(function (f) {
+      let target = f.split('/')
+      let o = `${options.folder}${pkg.package}${DELIMITER}${pkg.version}/${target[target.length - 1]}`
+      fs.copySync(f, o)
+      out.push(o)
+    })
+    out.map(function (f) {
+      processLineEndings(f, true)
+    })
+    return [0, null, null]
+  } else {
+    files.map(function (f) {
+      processed = processLineEndings(f, false)
+      processed.map(function (r) {
+        if (fs.lstatSync(r).isFile()) {
+          out.push(fs.readFileSync(r, 'utf8').toString())
+        } else {
+          out.push('!is_dir!')
+        }
+      })
+    })
+    return [ctrl.join('\n'), processed, out]
+  }
+}

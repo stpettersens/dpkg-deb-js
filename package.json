@@ -7,7 +7,7 @@
     "test": "mocha dpkg-deb.test.js --timeout=100000"
   },
   "bin": {
-    "dpkg-deb-js": "./dpkg-deb.js"
+    "dpkg-deb-js": "./cli.js"
   },
   "preferGlobal": true,
   "repository": {
@@ -28,7 +28,11 @@
   "homepage": "https://github.com/stpettersens/dpkg-deb-js#readme",
   "dependencies": {
     "artichoke": "^0.1.0",
-    "tarino": "^0.1.0"
+    "fs-extra": "^0.29.0",
+    "glob": "^7.0.3",
+    "ssp-dos2unix": "^1.0.0",
+    "tarino": "^0.1.0",
+    "title-case": "^1.1.2"
   },
   "devDependencies": {
     "chai": "^3.5.0"

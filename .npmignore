@@ -1,5 +1,5 @@
 node_modules/
-demo_0.1-1/
+test_pkg/
 *.deb
 *.tar
 *.tar.gz
