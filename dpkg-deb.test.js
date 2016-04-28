@@ -33,9 +33,7 @@ describe('Test dpkg-deb-js tool:\n', function () {
         console.log('\n' + stderr)
       }
       console.log('\n\t' + stdout)
-      if (!fs.existsSync(`${target}.deb`)) {
-        throw Error
-      }
+      assert.equal(fs.existsSync(`${target}.deb`), true)
       done()
     })
   })
