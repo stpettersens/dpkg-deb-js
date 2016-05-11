@@ -97,6 +97,16 @@ module.exports.buildDebianArchive = function (src, verbose) {
   })
 }
 
+module.exports.viewContentsArchive = function (deb) {
+  // artichoke.unpackArchive(deb)
+  // tarino.extractTarGz('data.tar.gz', {full: true})
+  // tarino.listTar('data.tar')
+}
+
+module.exports.viewInfoArchive = function (deb) {
+  // !TODO
+}
+
 module.exports.generateDebianStaging = function (pkg, files, options) {
   let processed = []
   let out = []
