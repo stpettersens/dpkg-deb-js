@@ -41,10 +41,10 @@ function main (args) {
         dpkgDeb.buildDebianArchive(args[i + 1], true)
       }
       if (/-c|--contents/.test(args[i])) {
-        console.warn('!TODO')
+        dpkgDeb.viewContentsArchive(args[i + 1])
       }
       if (/-I|--info/.test(args[i])) {
-        console.warn('!TODO')
+        dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
         dpkgDeb.generateDebianStaging(JSON.parse(args[i + 1]))
