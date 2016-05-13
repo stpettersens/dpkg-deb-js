@@ -10,6 +10,7 @@
 
 'use strict'
 const dpkgDeb = require('./dpkg-deb')
+const fs = require('fs-extra')
 
 function displayError (program, message) {
   console.info('dpkg-deb-js: error: %s', message)
@@ -47,7 +48,7 @@ function main (args) {
         dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
-        dpkgDeb.generateDebianStaging(JSON.parse(args[i + 1]))
+        dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
       }
     }
   }
