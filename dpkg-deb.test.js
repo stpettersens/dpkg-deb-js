@@ -4,7 +4,6 @@
 
 /* global describe it */
 'use strict'
-
 const assert = require('chai').assert
 const fs = require('fs')
 const _exec = require('child_process').exec
