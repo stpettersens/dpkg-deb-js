@@ -94,7 +94,7 @@ module.exports.generateDebianStaging = function (pkg) {
   let out = []
   let ctrl = []
   for (let key in pkg) {
-    if (key !== 'files') {
+    if (key.charAt(0) !== '_') {
       ctrl.push(`${titlecase(key)}: ${pkg[key]}`)
     }
   }
