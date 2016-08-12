@@ -100,8 +100,9 @@ module.exports.generateDebianStaging = function (pkg) {
   }
   ctrl.push('')
 
-  if (pkg === undefined || pkg.package === undefined || pkg.version === undefined) {
-    console.warn('At least package name, version and files must be defined.')
+  if (pkg === undefined || pkg.package === undefined || pkg.version === undefined 
+  || pkg._files === undefined) {
+    console.warn('At least package name, version and _files must be defined.')
     process.exit(2)
   }
 
