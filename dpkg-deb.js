@@ -8,8 +8,8 @@
 */
 
 'use strict'
+
 const fs = require('fs-extra')
-const glob = require('glob')
 const tarino = require('tarino')
 const artichoke = require('artichoke')
 const titlecase = require('title-case')
@@ -66,27 +66,10 @@ function cleanUp (contents) {
   })
 }
 
-function processLineEndings (f, write) {
-  let fis = []
-  let files = glob.sync(f + '/*/**')
-  files.map(function (fi) {
-    if (!fs.lstatSync(fi).isDirectory()) {
-      let r = dos2unix(fi, {write: write})
-      if (r === 1) {
-        r = fi
-      }
-      fis.push(r)
-    } else {
-      fis.push(fi)
-    }
-  })
-  return fis
-}
-
 module.exports.buildDebianArchive = function (src, verbose) {
   let pkg = createCtrlArchive(readCtrlFile(`${src}/DEBIAN/control`))
   createDataArchive(pkg)
-  fs.watchFile('data.tar.gz', function (curr, prev) {
+  fs.watchFile('data.tar.gz', function (curr) { //, prev) {
     if (curr.size > 0) {
       if (createDebArchive(pkg, verbose) === 0) {
         process.exit(0)
@@ -107,57 +90,35 @@ module.exports.viewInfoArchive = function (deb) {
   // !TODO
 }
 
-module.exports.generateDebianStaging = function (pkg, files, options) {
-  let processed = []
+module.exports.generateDebianStaging = function (pkg) {
   let out = []
   let ctrl = []
   for (let key in pkg) {
-    ctrl.push(`${titlecase(key)}: ${pkg[key]}`)
+    if (key !== 'files') {
+      ctrl.push(`${titlecase(key)}: ${pkg[key]}`)
+    }
   }
   ctrl.push('')
 
   if (pkg === undefined || pkg.package === undefined || pkg.version === undefined) {
-    console.warn('At least package name and version must be defined.')
-    return [2, null, null]
+    console.warn('At least package name, version and files must be defined.')
+    process.exit(2)
   }
 
-  if (options === undefined) {
-    options = {
-      write: true,
-      folder: ''
-    }
-  }
+  let dpath = `${pkg.package}${DELIMITER}${pkg.version}/DEBIAN`
+  fs.mkdirpSync(dpath)
+  fs.writeFileSync(`${dpath}/control`, ctrl.join('\n'), 'utf8')
 
-  if (options.write) {
-    if (options.folder === undefined) {
-      options.folder = ''
-    } else {
-      options.folder += '/'
-    }
-    let dpath = `${options.folder}${pkg.package}${DELIMITER}${pkg.version}/DEBIAN`
-    fs.mkdirpSync(dpath)
-    fs.writeFileSync(`${dpath}/control`, ctrl.join('\n'), 'utf8')
-    files.map(function (f) {
-      let target = f.split('/')
-      let o = `${options.folder}${pkg.package}${DELIMITER}${pkg.version}/${target[target.length - 1]}`
-      fs.copySync(f, o)
-      out.push(o)
-    })
-    out.map(function (f) {
-      processLineEndings(f, true)
-    })
-    return [0, null, null]
-  } else {
-    files.map(function (f) {
-      processed = processLineEndings(f, false)
-      processed.map(function (r) {
-        if (fs.lstatSync(r).isFile()) {
-          out.push(fs.readFileSync(r, 'utf8').toString())
-        } else {
-          out.push('!is_dir!')
-        }
-      })
-    })
-    return [ctrl.join('\n'), processed, out]
-  }
+  pkg.files.map(function (f) {
+    let target = f.split(':')
+    let o = `${pkg.package}${DELIMITER}${pkg.version}/${target[1]}`
+    fs.copySync(target[0], o)
+    out.push(o)
+  })
+
+  out.map(function (f) {
+    dos2unix(f, {write: true}) // Process line endings.
+  })
+
+  return `${pkg.package}${DELIMITER}${pkg.version}`
 }

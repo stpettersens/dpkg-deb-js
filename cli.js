@@ -9,6 +9,7 @@
 */
 
 'use strict'
+
 const dpkgDeb = require('./dpkg-deb')
 const fs = require('fs-extra')
 const g = require('generic-functions')
@@ -19,8 +20,8 @@ function displayError (program, message) {
 }
 
 function displayUsage (program, exitCode) {
-  console.log('\nUsage: %s [<option> ...] <command>\n', program)
-  console.log('Commands:')
+  console.log('\nUsage: %s [<option> ...] <command>', program)
+  console.log('\nStandard commands:')
   console.log('  -b|--build <directory> [<deb>]  Build an archive.')
   console.log('  -c|--contents <deb>             List contents.')
   console.log('  -I|--info <deb>                 Show info to stdout.')
@@ -42,10 +43,11 @@ function main (args) {
         if (args[i + 1] === undefined) {
           displayError(args[1], '--build needs a <directory> argument')
         }
+        let pn = args[i + 1]
         if (g.endswithdot('json')) {
-          dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
+          pn = dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
         }
-        dpkgDeb.buildDebianArchive(args[i + 1], true)
+        dpkgDeb.buildDebianArchive(pn, true)
       }
       if (/-c|--contents/.test(args[i])) {
         dpkgDeb.viewContentsArchive(args[i + 1])

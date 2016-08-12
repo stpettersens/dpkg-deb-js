@@ -1,9 +1,0 @@
-{
-  "package": "demo",
-  "version": "0.1-1",
-  "section": "base",
-  "priority": "optional",
-  "architecture": "i386",
-  "maintainer": "Mr. Apt <apt@nowhere.tld>",
-  "description": "A dummy package"
-}
