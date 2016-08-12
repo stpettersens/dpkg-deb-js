@@ -11,6 +11,7 @@
 'use strict'
 const dpkgDeb = require('./dpkg-deb')
 const fs = require('fs-extra')
+const g = require('generic-functions')
 
 function displayError (program, message) {
   console.info('dpkg-deb-js: error: %s', message)
@@ -23,7 +24,9 @@ function displayUsage (program, exitCode) {
   console.log('  -b|--build <directory> [<deb>]  Build an archive.')
   console.log('  -c|--contents <deb>             List contents.')
   console.log('  -I|--info <deb>                 Show info to stdout.')
-  console.log('\n-s|--stage <pkg.json>           Stage package structure from JSON file. *')
+  console.log('\nExtended commands:')
+  console.log('  -s|--stage <pkg.json>           Stage package structure from JSON file.')
+  console.log('  -b|--build <pkg.json>           Build an archive from JSON file.\n')
   process.exit(exitCode)
 }
 
@@ -38,6 +41,9 @@ function main (args) {
       if (/-b|--build/.test(args[i])) {
         if (args[i + 1] === undefined) {
           displayError(args[1], '--build needs a <directory> argument')
+        }
+        if (g.endswithdot('json')) {
+          dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
         }
         dpkgDeb.buildDebianArchive(args[i + 1], true)
       }
