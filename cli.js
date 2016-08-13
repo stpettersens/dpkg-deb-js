@@ -11,7 +11,6 @@
 'use strict'
 
 const dpkgDeb = require('./dpkg-deb')
-const fs = require('fs-extra')
 const g = require('generic-functions')
 
 function displayError (program, message) {
@@ -45,7 +44,7 @@ function main (args) {
         }
         let pn = args[i + 1]
         if (g.endswithdot(pn) === '.json') {
-          pn = dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
+          pn = dpkgDeb.generateDebianStaging(args[i + 1])
         }
         dpkgDeb.buildDebianArchive(pn, args[i + 2], true)
       }
@@ -56,7 +55,7 @@ function main (args) {
         dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
-        dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
+        dpkgDeb.generateDebianStaging(args[i + 1])
       }
     }
   }

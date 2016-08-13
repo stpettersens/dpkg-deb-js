@@ -71,7 +71,7 @@ module.exports.buildDebianArchive = function (src, _package, verbose) {
   createDataArchive(pkg)
   fs.watchFile('data.tar.gz', function (curr) {
     if (curr.size > 0) {
-      if (_package.length > 0) {
+      if (_package !== undefined) {
         pkg.package = _package.replace(/\.deb/, '')
         pkg.version = ''
         DELIMITER = ''
@@ -89,13 +89,17 @@ module.exports.viewContentsArchive = function (deb) {
   // artichoke.unpackArchive(deb)
   // tarino.extractTarGz('data.tar.gz', {full: true})
   // tarino.listTar('data.tar')
+  // !TODO
+  console.log('Not yet implementated.')
 }
 
 module.exports.viewInfoArchive = function (deb) {
   // !TODO
+  console.log('Not yet implemented.')
 }
 
-module.exports.generateDebianStaging = function (pkg) {
+module.exports.generateDebianStaging = function (json) {
+  const pkg = fs.readJsonSync(json)
   const fpkg = `${pkg.package}${DELIMITER}${pkg.version}`
   let out = []
   let ctrl = []
