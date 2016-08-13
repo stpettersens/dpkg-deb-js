@@ -72,7 +72,7 @@ module.exports.buildDebianArchive = function (src, _package, verbose) {
   fs.watchFile('data.tar.gz', function (curr) {
     if (curr.size > 0) {
       if (_package.length > 0) {
-        pkg.package = _package.replace(/^.deb$/, '')
+        pkg.package = _package.replace(/\.deb/, '')
         pkg.version = ''
         DELIMITER = ''
       }
@@ -126,6 +126,5 @@ module.exports.generateDebianStaging = function (pkg) {
   out.map(function (f) {
     dos2unix(f, {write: true}) // Process line endings.
   })
-
   return fpkg
 }
