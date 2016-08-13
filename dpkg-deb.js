@@ -38,19 +38,19 @@ function readCtrlFile (control) {
 }
 
 function createCtrlArchive (pkg) {
-  let rt = `${pkg.package}${DELIMITER}${pkg.version}`
+  const rt = `${pkg.package}${DELIMITER}${pkg.version}`
   tarino.createTarGz('control.tar.gz', 'control', {root: `${rt}/DEBIAN`, flat: true})
   return pkg
 }
 
 function createDataArchive (pkg) {
-  let rt = `${pkg.package}${DELIMITER}${pkg.version}`
+  const rt = `${pkg.package}${DELIMITER}${pkg.version}`
   tarino.createTarGz('data.tar.gz', 'opt', {root: rt, folder: true})
 }
 
 function createDebArchive (pkg, verbose) {
-  let deb = `${pkg.package}${DELIMITER}${pkg.version}.deb`
-  let contents = ['debian-binary', 'control.tar.gz', 'data.tar.gz']
+  const deb = `${pkg.package}${DELIMITER}${pkg.version}.deb`
+  const contents = ['debian-binary', 'control.tar.gz', 'data.tar.gz']
   if (verbose) {
     console.info("dpkg-deb-js: building package '%s' in '%s'.", pkg.package, deb)
   }
@@ -66,11 +66,16 @@ function cleanUp (contents) {
   })
 }
 
-module.exports.buildDebianArchive = function (src, verbose) {
+module.exports.buildDebianArchive = function (src, _package, verbose) {
   let pkg = createCtrlArchive(readCtrlFile(`${src}/DEBIAN/control`))
   createDataArchive(pkg)
-  fs.watchFile('data.tar.gz', function (curr) { //, prev) {
+  fs.watchFile('data.tar.gz', function (curr) {
     if (curr.size > 0) {
+      if (_package.length > 0) {
+        pkg.package = _package.replace(/^.deb$/, '')
+        pkg.version = ''
+        DELIMITER = ''
+      }
       if (createDebArchive(pkg, verbose) === 0) {
         process.exit(0)
       } else {
@@ -91,6 +96,7 @@ module.exports.viewInfoArchive = function (deb) {
 }
 
 module.exports.generateDebianStaging = function (pkg) {
+  const fpkg = `${pkg.package}${DELIMITER}${pkg.version}`
   let out = []
   let ctrl = []
   for (let key in pkg) {
@@ -100,19 +106,19 @@ module.exports.generateDebianStaging = function (pkg) {
   }
   ctrl.push('')
 
-  if (pkg === undefined || pkg.package === undefined || pkg.version === undefined 
-  || pkg._files === undefined) {
+  if (pkg === undefined || pkg.package === undefined ||
+  pkg.version === undefined || pkg._files === undefined) {
     console.warn('At least package name, version and _files must be defined.')
     process.exit(2)
   }
 
-  let dpath = `${pkg.package}${DELIMITER}${pkg.version}/DEBIAN`
+  const dpath = `${fpkg}/DEBIAN`
   fs.mkdirpSync(dpath)
   fs.writeFileSync(`${dpath}/control`, ctrl.join('\n'), 'utf8')
 
-  pkg.files.map(function (f) {
+  pkg._files.map(function (f) {
     let target = f.split(':')
-    let o = `${pkg.package}${DELIMITER}${pkg.version}/${target[1]}`
+    let o = `${fpkg}/${target[1]}`
     fs.copySync(target[0], o)
     out.push(o)
   })
@@ -121,5 +127,5 @@ module.exports.generateDebianStaging = function (pkg) {
     dos2unix(f, {write: true}) // Process line endings.
   })
 
-  return `${pkg.package}${DELIMITER}${pkg.version}`
+  return fpkg
 }

@@ -27,7 +27,7 @@ function displayUsage (program, exitCode) {
   console.log('  -I|--info <deb>                 Show info to stdout.')
   console.log('\nExtended commands:')
   console.log('  -s|--stage <pkg.json>           Stage package structure from JSON file.')
-  console.log('  -b|--build <pkg.json>           Build an archive from JSON file.\n')
+  console.log('  -b|--build <pkg.json>  [<deb>]  Build an archive from JSON file.\n')
   process.exit(exitCode)
 }
 
@@ -41,13 +41,13 @@ function main (args) {
       }
       if (/-b|--build/.test(args[i])) {
         if (args[i + 1] === undefined) {
-          displayError(args[1], '--build needs a <directory> argument')
+          displayError(args[1], '--build needs a <directory/pkg.json> argument')
         }
         let pn = args[i + 1]
-        if (g.endswithdot('json')) {
+        if (g.endswithdot(pn) === '.json') {
           pn = dpkgDeb.generateDebianStaging(fs.readJsonSync(args[i + 1]))
         }
-        dpkgDeb.buildDebianArchive(pn, true)
+        dpkgDeb.buildDebianArchive(pn, args[i + 2], true)
       }
       if (/-c|--contents/.test(args[i])) {
         dpkgDeb.viewContentsArchive(args[i + 1])
