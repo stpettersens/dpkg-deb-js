@@ -10,7 +10,7 @@
 'use strict'
 
 const fs = require('fs-extra')
-const tarino = require('tarino')
+const tarino = require('ssp-tarino')
 const artichoke = require('artichoke')
 const titlecase = require('title-case')
 const dos2unix = require('ssp-dos2unix').dos2unix
