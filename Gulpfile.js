@@ -2,8 +2,8 @@
 
 const gulp = require('gulp')
 const mocha = require('gulp-mocha')
-const sequence = require('gulp-sequence')
 const standard = require('gulp-standard')
+const sequence = require('gulp-sequence')
 const clean = require('gulp-rimraf')
 
 gulp.task('standard', function () {
@@ -14,8 +14,13 @@ gulp.task('standard', function () {
   }))
 })
 
-gulp.task('mocha', function () {
-  return gulp.src('dpkg-deb.test.js')
+gulp.task('test', function () {
+  return gulp.src('dpkg-deb.test1.js')
+  .pipe(mocha({reporter: 'min', timeout: 100000}))
+})
+
+gulp.task('test2', function () {
+  return gulp.src('dpkg-deb.test2.js')
   .pipe(mocha({reporter: 'min', timeout: 100000}))
 })
 
@@ -24,4 +29,4 @@ gulp.task('clean', function () {
   .pipe(clean())
 })
 
-gulp.task('test', sequence('standard', 'mocha'))
+gulp.task('test1', sequence('standard', 'test'))

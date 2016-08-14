@@ -44,7 +44,7 @@ function main (args) {
         }
         let pn = args[i + 1]
         if (g.endswithdot(pn) === '.json') {
-          pn = dpkgDeb.generateDebianStaging(args[i + 1])
+          pn = dpkgDeb.generateDebianStaging(args[i + 1], false)
         }
         dpkgDeb.buildDebianArchive(pn, args[i + 2], true)
       }

@@ -71,7 +71,7 @@ module.exports.buildDebianArchive = function (src, _package, verbose) {
   createDataArchive(pkg)
   fs.watchFile('data.tar.gz', function (curr) {
     if (curr.size > 0) {
-      if (_package !== undefined) {
+      if (_package !== undefined && _package !== null) {
         pkg.package = _package.replace(/\.deb/, '')
         pkg.version = ''
         DELIMITER = ''
@@ -85,8 +85,8 @@ module.exports.buildDebianArchive = function (src, _package, verbose) {
   })
 }
 
-module.exports.buildDebianArchiveFromJson = function (json) {
-  this.buildDebianArchive(this.generateDebianStaging(json))
+module.exports.buildDebianArchiveFromJson = function (json, verbose) {
+  this.buildDebianArchive(this.generateDebianStaging(json), null, verbose)
 }
 
 module.exports.viewContentsArchive = function (deb) {
@@ -102,7 +102,7 @@ module.exports.viewInfoArchive = function (deb) {
   console.log('Not yet implemented.')
 }
 
-module.exports.generateDebianStaging = function (json) {
+module.exports.generateDebianStaging = function (json, verbose) {
   let pkg = null
   try {
     fs.statSync(json)
@@ -124,6 +124,10 @@ module.exports.generateDebianStaging = function (json) {
   pkg.version === undefined || pkg._files === undefined) {
     console.warn('At least package name, version and _files must be defined.')
     process.exit(2)
+  }
+
+  if (verbose) {
+    console.info("dpkg-deb-js: staging package '%s'.", pkg.package)
   }
 
   const dpath = `${fpkg}/DEBIAN`
