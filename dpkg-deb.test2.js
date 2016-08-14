@@ -25,7 +25,7 @@ const pkg = {
 
 describe('Test dpkg-deb-js tool:\n', function () {
   it('Should stage a debian package from `pkg` object (via module).', function (done) {
-    console.log('* Stage a debian package from object.')
+    console.log('\n* Stage a debian package from object.')
     dpkgDeb.generateDebianStaging(pkg, false)
     assert.equal(fs.existsSync('demo_from_json_0.1-1/DEBIAN/control'), true)
     assert.equal(fs.existsSync('demo_from_json_0.1-1.deb'), true)
