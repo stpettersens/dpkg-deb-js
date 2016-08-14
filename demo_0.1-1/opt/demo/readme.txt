@@ -1,1 +1,1 @@
-This is about the demo package
+This is about the demo package.
