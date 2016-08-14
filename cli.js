@@ -14,7 +14,7 @@ const dpkgDeb = require('./dpkg-deb')
 const g = require('generic-functions')
 
 function displayError (program, message) {
-  console.info('dpkg-deb-js: error: %s', message)
+  console.warn('dpkg-deb-js: error: %s', message)
   displayUsage(program, 2)
 }
 

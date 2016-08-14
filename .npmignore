@@ -1,5 +1,6 @@
 node_modules/
 demo_from_json_0.1-1/
+demo_from_object_0.1-1/
 demo_0.1-1.json
 *.deb
 *.tar

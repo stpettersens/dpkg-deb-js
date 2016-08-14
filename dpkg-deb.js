@@ -85,6 +85,10 @@ module.exports.buildDebianArchive = function (src, _package, verbose) {
   })
 }
 
+module.exports.buildDebianArchiveFromJson = function (json) {
+  this.buildDebianArchive(this.generateDebianStaging(json))
+}
+
 module.exports.viewContentsArchive = function (deb) {
   // artichoke.unpackArchive(deb)
   // tarino.extractTarGz('data.tar.gz', {full: true})
@@ -99,7 +103,13 @@ module.exports.viewInfoArchive = function (deb) {
 }
 
 module.exports.generateDebianStaging = function (json) {
-  const pkg = fs.readJsonSync(json)
+  let pkg = null
+  try {
+    fs.statSync(json)
+    pkg = fs.readJsonSync(json)
+  } catch (e) {
+    pkg = json
+  }
   const fpkg = `${pkg.package}${DELIMITER}${pkg.version}`
   let out = []
   let ctrl = []
