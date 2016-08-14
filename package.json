@@ -31,7 +31,7 @@
     "fs-extra": "^0.30.0",
     "generic-functions": "^0.1.9",
     "ssp-dos2unix": "^1.0.0",
-    "tarino": "^0.1.0",
+    "tarino": "git+https://github.com/stpettersens/tarino.git",
     "title-case": "^2.1.0"
   },
   "devDependencies": {
