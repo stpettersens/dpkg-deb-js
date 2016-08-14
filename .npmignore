@@ -9,6 +9,7 @@ demo_0.1-1.json
 .gitignore
 .npmignore
 .travis.yml
+appveyor.yml
 Gulpfile.js
 dpkg-deb.test1.js
 dpkg-deb.test2.js
