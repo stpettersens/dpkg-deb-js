@@ -1,5 +1,4 @@
 node_modules/
-test_pkg/
 demo_from_json_0.1-1/
 *.deb
 *.tar

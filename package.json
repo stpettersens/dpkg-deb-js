@@ -4,7 +4,7 @@
   "description": "dpkg-deb implementation with Node.js",
   "main": "dpkg-deb.js",
   "scripts": {
-    "test": "mocha dpkg-deb.test.js --timeout=100000"
+    "test": "gulp test"
   },
   "bin": {
     "dpkg-deb-js": "./cli.js"
@@ -36,6 +36,9 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
-    "gulp": "^3.9.1"
+    "gulp": "^3.9.1",
+    "gulp-mocha": "^3.0.1",
+    "gulp-sequence": "^0.4.5",
+    "gulp-standard": "^7.0.1"
   }
 }
