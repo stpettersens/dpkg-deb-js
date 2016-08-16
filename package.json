@@ -27,11 +27,11 @@
   },
   "homepage": "https://github.com/stpettersens/dpkg-deb-js#readme",
   "dependencies": {
-    "artichoke": "^0.1.0",
     "fs-extra": "^0.30.0",
     "generic-functions": "^0.1.9",
     "ssp-dos2unix": "^1.0.0",
     "ssp-tarino": "^0.1.1",
+    "ssp-artichoke": "^0.1.0",
     "title-case": "^2.1.0"
   },
   "devDependencies": {

@@ -11,7 +11,7 @@
 
 const fs = require('fs-extra')
 const tarino = require('ssp-tarino')
-const artichoke = require('artichoke')
+const artichoke = require('ssp-artichoke')
 const titlecase = require('title-case')
 const dos2unix = require('ssp-dos2unix').dos2unix
 
