@@ -4,7 +4,7 @@
   Copyright 2016 Sam Saint-Pettersen.
 
   Released as original dpkg-deb under the
-  GNU General Public License and in additon
+  GNU General Public License and additionally
   the MIT License; see GPL-LICENSE and MIT-LICENSE.
 */
 
@@ -52,9 +52,9 @@ function main (args) {
         dpkgDeb.viewContentsArchive(args[i + 1])
       }
       if (/-I|--info/.test(args[i])) {
-        dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
+        dpkgDeb.viewInfoArchive(args[i + 1])
         dpkgDeb.generateDebianStaging(args[i + 1])
       }
     }

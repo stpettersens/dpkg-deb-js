@@ -4,7 +4,7 @@
   "description": "dpkg-deb implementation with Node.js",
   "main": "dpkg-deb.js",
   "scripts": {
-    "test": "gulp test1 && gulp test2"
+    "test": "gulp test1 && gulp test2 && gulp test3"
   },
   "bin": {
     "dpkg-deb-js": "./cli.js"
@@ -29,9 +29,10 @@
   "dependencies": {
     "fs-extra": "^0.30.0",
     "generic-functions": "^0.1.9",
+    "sleep": "^3.0.1",
+    "ssp-artichoke": "^0.1.0",
     "ssp-dos2unix": "^1.0.0",
     "ssp-tarino": "^0.1.1",
-    "ssp-artichoke": "^0.1.0",
     "title-case": "^2.1.0"
   },
   "devDependencies": {

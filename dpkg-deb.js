@@ -3,16 +3,17 @@
   Copyright 2016 Sam Saint-Pettersen.
 
   Released as original dpkg-deb under the
-  GNU General Public License and in additon
+  GNU General Public License and additionally
   the MIT License; see GPL-LICENSE and MIT-LICENSE.
 */
 
 'use strict'
 
 const fs = require('fs-extra')
+const titlecase = require('title-case')
+const sleep = require('sleep')
 const tarino = require('ssp-tarino')
 const artichoke = require('ssp-artichoke')
-const titlecase = require('title-case')
 const dos2unix = require('ssp-dos2unix').dos2unix
 
 let DELIMITER = '_'
@@ -144,5 +145,7 @@ module.exports.generateDebianStaging = function (json, verbose) {
   out.map(function (f) {
     dos2unix(f, {write: true}) // Process line endings.
   })
+
+  sleep.sleep(15)
   return fpkg
 }
