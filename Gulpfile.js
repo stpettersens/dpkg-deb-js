@@ -6,6 +6,7 @@ const standard = require('gulp-standard')
 const sequence = require('gulp-sequence')
 const clean = require('gulp-rimraf')
 const os = require('os')
+const fs = require('fs')
 const _exec = require('child_process').exec
 
 gulp.task('standard', function () {
@@ -31,6 +32,11 @@ gulp.task('test3', function () {
     _exec('sudo dpkg -i demo_0.1-1.deb', function (err, stdout, stderr) {
       if (!err) {
         console.log(stdout)
+      }
+      console.log('')
+      const readme = fs.readFileSync('/opt/demo/readme.txt').toString().split('\n')
+      for(i in readme) {
+        console.log(readme[i])
       }
     })
   }
