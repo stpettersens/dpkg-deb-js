@@ -35,7 +35,7 @@ gulp.task('test3', function () {
       }
       console.log('')
       const readme = fs.readFileSync('/opt/demo/readme.txt').toString().split('\n')
-      for(let i in readme) {
+      for (let i in readme) {
         console.log(readme[i])
       }
     })
