@@ -34,7 +34,11 @@ gulp.task('test3', function () {
         console.log(stdout)
       }
     })
-    console.log('')
+  }
+})
+
+gulp.task('test4', function () {
+  if (os.platform() === 'linux') {
     const readme = fs.readFileSync('/opt/demo/readme.txt').toString().split('\n')
     for (let i in readme) {
       console.log(readme[i])
