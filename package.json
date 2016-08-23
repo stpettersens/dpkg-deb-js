@@ -30,7 +30,7 @@
     "fs-extra": "^0.30.0",
     "generic-functions": "^0.1.9",
     "sleep": "^3.0.1",
-    "ssp-artichoke": "^0.1.0",
+    "ssp-artichoke": "git://github.com/stpettersens/artichoke.git",
     "ssp-dos2unix": "^1.0.0",
     "ssp-tarino": "^0.1.1",
     "title-case": "^2.1.0"
