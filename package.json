@@ -4,7 +4,7 @@
   "description": "dpkg-deb implementation with Node.js",
   "main": "dpkg-deb.js",
   "scripts": {
-    "test": "gulp test1 && gulp test2 && gulp test3 && gulp test4"
+    "test": "gulp test1 && gulp test2"
   },
   "bin": {
     "dpkg-deb-js": "./cli.js"
