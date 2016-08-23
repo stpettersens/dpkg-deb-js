@@ -4,6 +4,7 @@ const gulp = require('gulp')
 const mocha = require('gulp-mocha')
 const standard = require('gulp-standard')
 const sequence = require('gulp-sequence')
+const wait = require('gulp-wait')
 const clean = require('gulp-rimraf')
 const os = require('os')
 const fs = require('fs')
@@ -35,6 +36,8 @@ gulp.task('test3', function () {
       }
     })
   }
+  return gulp.src('*', {read: false})
+  .pipe(wait(1500))
 })
 
 gulp.task('test4', function () {
