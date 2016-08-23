@@ -52,9 +52,9 @@ function main (args) {
         dpkgDeb.viewContentsArchive(args[i + 1])
       }
       if (/-I|--info/.test(args[i])) {
+        dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
-        dpkgDeb.viewInfoArchive(args[i + 1])
         dpkgDeb.generateDebianStaging(args[i + 1])
       }
     }

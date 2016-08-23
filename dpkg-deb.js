@@ -100,6 +100,7 @@ module.exports.viewContentsArchive = function (deb) {
 
 module.exports.viewInfoArchive = function (deb) {
   // !TODO
+  artichoke.unpackArchive(deb)
   console.log('Not yet implemented.')
 }
 
