@@ -99,7 +99,7 @@ module.exports.viewContentsArchive = function (deb) {
 }
 
 module.exports.viewInfoArchive = function (deb) {
-  artichoke.unpackArchive(deb)
+  artichoke.unpackArchive(deb, true)
   console.log('Not yet implemented.')
 }
 
