@@ -67,13 +67,13 @@ function cleanUp (contents) {
   })
 }
 
-module.exports.buildDebianArchive = function (src, _package, verbose) {
+module.exports.buildDebianArchive = function (src, pn, verbose) {
   let pkg = createCtrlArchive(readCtrlFile(`${src}/DEBIAN/control`))
   createDataArchive(pkg)
   fs.watchFile('data.tar.gz', function (curr) {
     if (curr.size > 0) {
-      if (_package !== undefined && _package !== null) {
-        pkg.package = _package.replace(/\.deb/, '')
+      if (pn !== undefined && pn !== null) {
+        pkg.package = pn.replace(/\.deb/, '')
         pkg.version = ''
         DELIMITER = ''
       }

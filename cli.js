@@ -42,11 +42,11 @@ function main (args) {
         if (args[i + 1] === undefined) {
           displayError(args[1], '--build needs a <directory/pkg.json> argument')
         }
-        let pn = args[i + 1]
-        if (g.endswithdot(pn) === '.json') {
-          pn = dpkgDeb.generateDebianStaging(args[i + 1], false)
+        let src = args[i + 1]
+        if (g.endswithdot(src) === '.json') {
+          src = dpkgDeb.generateDebianStaging(args[i + 1], false)
         }
-        dpkgDeb.buildDebianArchive(pn, args[i + 2], true)
+        dpkgDeb.buildDebianArchive(src, args[i + 2], true)
       }
       if (/-c|--contents/.test(args[i])) {
         dpkgDeb.viewContentsArchive(args[i + 1])
@@ -55,7 +55,7 @@ function main (args) {
         dpkgDeb.viewInfoArchive(args[i + 1])
       }
       if (/-s|--stage/.test(args[i])) {
-        dpkgDeb.generateDebianStaging(args[i + 1])
+        dpkgDeb.generateDebianStaging(args[i + 1], true)
       }
     }
   }
