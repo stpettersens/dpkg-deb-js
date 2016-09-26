@@ -13,3 +13,4 @@ appveyor.yml
 Gulpfile.js
 dpkg-deb.test1.js
 dpkg-deb.test2.js
+jsconfig.json
